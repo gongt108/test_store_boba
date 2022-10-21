@@ -63,32 +63,7 @@ const CheckoutScreen = () => {
     const [selectedShipping, setSelectedShipping] = React.useState(shippingOptions[0]);
     let grandTotal = (totalCartPrice * 1.1025 + selectedShipping.price).toFixed(2);
 
-	// const fetchPaymentSheetParams = async () => {
-	// 	const response = await fetch('http://10.0.2.2:4242/payment-sheet', {
-	// 	  headers: {
-	// 		'Content-Type': 'application/json',
-	// 	  },
-	// 	});
-	// 	const data = await response.json();
-    // 	console.log(data);
-	
-	// 	if (!response.ok) return Alert.alert(data.message);
-	// 	const clientSecret = data.clientSecret;
-	// 	const initSheet = await stripe.initPaymentSheet({
-	// 	paymentIntentClientSecret: clientSecret,
-	// 	});
-	// 	if (initSheet.error) return Alert.alert(initSheet.error.message);
-    // const presentSheet = await stripe.presentPaymentSheet({
-    //   clientSecret,
-    // });
-    // if (presentSheet.error) return Alert.alert(presentSheet.error.message);
 
-    // else{
-	// 	navigation.navigate('Payment', {grandTotal: grandTotal});
-	//   }
-	// }
-	console.log(items);
-	console.log('test: ' + totalCartPrice);
 	return (
 		<SafeAreaView>
             <ScrollView>

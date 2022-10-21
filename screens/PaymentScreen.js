@@ -17,6 +17,7 @@ import {
 } from 'react-native-paper';
 import { ArrowLeftIcon, StarIcon, XMarkIcon } from 'react-native-heroicons/solid'
 import { useNavigation, useRoute } from '@react-navigation/native';
+// import e from 'express';
 
 
 export default function PaymentScreen() {
