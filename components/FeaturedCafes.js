@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react'
 import FeaturedCafe from './FeaturedCafe'
 import client from '../sanity';
 
-const FeaturedCafes = () => {
+const FeaturedCafes = ({ clickCafe }) => {
 
   const [cafeList, setCafeList] = useState([]);
 
@@ -11,7 +11,9 @@ const FeaturedCafes = () => {
     client.fetch(
         `*[_type == "cafe"]`
     ).then(data => {
-        setCafeList(data);
+        setCafeList(data.sort(function(a, b) {
+          return a.order > b.order;
+        }))
     })
 }, [])
 
@@ -33,6 +35,7 @@ const FeaturedCafes = () => {
                 key={item._id}
                 title={item.name}
                 imgUrl={item.image}
+                clickCafe={clickCafe}
             />
         ))}
       

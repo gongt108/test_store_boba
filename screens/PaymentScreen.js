@@ -10,6 +10,7 @@ import {
 	useStripe,
 	StripeContainer,
 	useConfirmPayment
+
 } from '@stripe/stripe-react-native';
 import {
 	Button,
@@ -17,13 +18,16 @@ import {
 } from 'react-native-paper';
 import { ArrowLeftIcon, StarIcon, XMarkIcon } from 'react-native-heroicons/solid'
 import { useNavigation, useRoute } from '@react-navigation/native';
-// import e from 'express';
+import { API_URL, stripeAPI } from '../Config';
+import { useDispatch, useSelector } from 'react-redux'
+import { clearBasket } from '../features/basketSlice';
 
 
 export default function PaymentScreen() {
 	const navigation = useNavigation();
+    const dispatch = useDispatch();
 	const [cardDetails, setCardDetails] = useState();
-	// const { confirmPayment, loading } = useConfirmPayment();
+	const { confirmPayment, loading } = useConfirmPayment();
 
   const {
     params: {
@@ -37,46 +41,72 @@ export default function PaymentScreen() {
     },
   } = useRoute();
 
-//   const fetchPaymentIntentClientSecret = async () => {
-// 	const response = await fetch(`https://localhost:3000/create-payment-intent`, {
-// 		headers: {
-// 		  'Content-Type': 'application/json',
-// 		},
-// 	  });
+  const clearItemBasket = () => {
+	dispatch(clearBasket())
+}
 
-// 	  const { clientSecret, error } = await response.json();
-// 	  return { clientSecret, error };
-//   }
-
-//   const handlePayment = async () => {
-
-// 	if(!cardDetails?.complete) {
-// 		Alert.alert("Please enter a valid card.");
-// 		return;
-// 	}
-
+  const handlePayment = () => {
+	if(!cardDetails?.complete) {
+		Alert.alert("Please enter a valid card.");
+		return;
+	} else {
+		clearItemBasket();
+		navigation.navigate("Home");
+		Alert.alert("Thank you for your purchase!");
+	}
 
 // 	try {
-// 		const { clientSecret, error } = await fetchPaymentIntentClientSecret();
+// 		const finalAmount = parseFloat(grandTotal);
+//     	// if (finalAmount > 1) return Alert.alert(finalAmount);
 
-// 		if(error) {
-// 			console.log("Unable to process payment.");
+// 		const response = await fetch("http://localhost:5000/donate", 
+// 		{
+// 			method: 'POST',
+// 			headers: {
+// 			'Content-Type': 'application/json',
+// 			},
+// 			body: JSON.stringify ({
+// 				// paymentMethodType: 'card',
+// 				// currency: 'usd'
+// 				amount: finalAmount,
+// 				name: name
+
+// 			}),
+// 		});
+// 	  const data = await response.json();
+// 		if (!response.ok) {
+// 			console.log("failed here.")
+// 		return Alert.alert(data.message);
 // 		} else {
-// 			const {paymentIntent, error } = await confirmPayment(clientSecret, {
-// 				type: "Card",
-// 				name: name,
-// 				grandTotal: grandTotal
-// 			});
-// 			if(error) {
-// 				alert(`Payment Confirmation Error ${error.message}`);
-// 			} else if(paymentIntent) {
-// 				alert("Payment successful ", paymentIntent);
-// 			}
+// 			console.log("this passed.")
 // 		}
-// 	} catch (e) {
-// 		console.log(e);
-// 	}
+
+// 	const initSheet = await stripe.initPaymentSheet({
+// 		paymentIntentClientSecret: data.clientSecret,
+// 		});
+// 		if (initSheet.error) {
+// 		console.error(initSheet.error);
+// 		return Alert.alert(initSheet.error.message);
+// 		}
+// 		const presentSheet = await stripe.presentPaymentSheet({
+// 		clientSecret: data.clientSecret,
+// 		});
+// 		if (presentSheet.error) {
+// 		console.error(presentSheet.error);
+// 		return Alert.alert(presentSheet.error.message);
+// 		}
+
+// 		Alert.alert("Donated successfully! Thank you for the donation.");
+//   } catch (err) {
+//     console.error(err);
+//     Alert.alert("Payment failed!");
 //   }
+
+
+  }
+
+	
+
 
 	return (
 		<View>
@@ -94,7 +124,6 @@ export default function PaymentScreen() {
 			<Text className='font-bold mb-2'>Card Information</Text>
 			<CardForm
 				onFormComplete={(cardDetails) => {
-					console.log('card details', cardDetails);
 					setCardDetails(cardDetails);
 				}}
 				style={{ height: 200 }}
@@ -105,15 +134,15 @@ export default function PaymentScreen() {
 				icon="cart"
 				color="#000000"
 				mode="contained"
-        		// onPress={() => handlePayment}
-				// disabled={loading}
+        		onPress={handlePayment}
+				disabled={loading}
 			>
 				Pay ${grandTotal}
 			</Button>
 			<StripeContainer />
 			<TouchableOpacity onPress={navigation.goBack} className='absolute top-12 right-5 p-2 bg-gray-300 rounded-full'>
-            <XMarkIcon size={35} color={"#FFFFFF"} />
-        </TouchableOpacity>
+				<XMarkIcon size={35} color={"#FFFFFF"} />
+			</TouchableOpacity>
 		</View>
 	);
 }

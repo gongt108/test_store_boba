@@ -34,7 +34,7 @@ const DrinkScreen = () => {
     const toppingOptions = ['honey boba', 'brown sugar boba', 'grass jelly', 'lychee jelly', 'strawberry popping boba', 'crystal boba', 'mango popping boba', 'aloe', 'egg pudding', 'coffee jelly'];
 
     useEffect (() => {
-        setTotalPrice(price + toppingsList.length * 0.5);
+        setTotalPrice(parseFloat((price + toppingsList.length * 0.5).toFixed(2)));
     }, [toppingsList]);
 
 
@@ -63,9 +63,9 @@ const DrinkScreen = () => {
             source={{uri: urlFor(imgUrl).url()}}
             className="h-96 w-full rounded-sm bg-gray-100"
         />
-        <TouchableOpacity onPress={navigation.goBack} className='absolute top-14 left-5 p-2 bg-gray-100 rounded-full'>
+        {/* <TouchableOpacity onPress={navigation.goBack} className='absolute top-14 left-5 p-2 bg-gray-100 rounded-full'>
             <ArrowLeftIcon size={20} />
-        </TouchableOpacity>
+        </TouchableOpacity> */}
         <View className='bg-white'>
             <View className='px-4 pt-4'>
                 <Text className='text-3xl font-bold'>{title}</Text>
@@ -156,8 +156,16 @@ const DrinkScreen = () => {
                 )
             })}
         </View>
+        <View className='bg-white mt-4 py-2'>
 
-        <View className='bg-white mt-4 pb-40'>
+        <TouchableOpacity className='my-4 mx-8' onPress={addItemToBasket}>
+            <Button className='fixed p-2' icon="cart" color="#FF0000" mode="contained" >
+                Add to Cart ${totalPrice}
+            </Button>
+            </TouchableOpacity>
+            </View>
+
+        <View className='bg-white mt-4 pb-4'>
             <View className='p-4'>
                 <Text className='font-bold text-2xl mb-2'>Reviews</Text>
                 <View>
@@ -178,12 +186,12 @@ const DrinkScreen = () => {
             </View>
         </View>
 
-    </ScrollView>
-    <TouchableOpacity className='absolute top-96 mt-96 py-8 px-24' onPress={addItemToBasket}>
-            <Button className='fixed p-2' icon="cart" color="#FF0000" mode="contained" >
-                Add to Cart ${totalPrice}
-            </Button>
-            </TouchableOpacity>
+    
+    
+            </ScrollView>
+            <TouchableOpacity onPress={navigation.goBack} className='absolute top-14 left-5 p-2 bg-gray-100 rounded-full'>
+            <ArrowLeftIcon size={20} />
+        </TouchableOpacity>
     
         </View>
   )

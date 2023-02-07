@@ -2,9 +2,12 @@ import { View, Text, Image, TouchableOpacity } from 'react-native'
 import React from 'react'
 import { urlFor } from '../sanity'
 
-const FeaturedCafe = ({ imgUrl, title }) => {
+const FeaturedCafe = ({ imgUrl, title, clickCafe }) => {
   return (
-    <TouchableOpacity className='relative mr-2'>
+    <TouchableOpacity 
+      className='relative mr-2' 
+      onPress={() => clickCafe({ title })}
+    >
       
       <Image 
         source={{

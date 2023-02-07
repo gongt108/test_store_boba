@@ -18,7 +18,7 @@ const CafeCard = ({
         className='w-1/2 p-2'
       >
     <TouchableOpacity 
-        className='h-1/4 items-center bg-white border rounded-md pt-4'
+        className='h-64 items-center bg-white border rounded-md pt-4'
         onPress={() => {
             navigation.navigate('Drink', {
                 title, 

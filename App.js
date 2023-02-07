@@ -14,12 +14,12 @@ import { Provider } from 'react-redux';
 import { store } from './store';
 import PaymentScreen from './screens/PaymentScreen';
 import { StripeProvider } from '@stripe/stripe-react-native';
+import { PUBLISHABLE_KEY } from './Config';
 
 
 const getFonts = () => Font.loadAsync({
     'AlexBrush-Regular': require('./assets/fonts/AlexBrush-Regular.ttf'),
   });
-
 
 export default function App() {
   const [fontsLoaded, setFontsLoaded] = React.useState(false);
@@ -29,7 +29,7 @@ export default function App() {
 
   if(fontsLoaded){
     return (
-      <StripeProvider publishableKey='pk_test_51LrzyaKvbb1tU2iANKlMga7UteXAflZvCYvGMV48oyhNF43iLRn9VbMNC6o5yrYUiDDUrQKmVqx5X7w5ncU4higv00Fdl6DHv6'>
+      <StripeProvider publishableKey="pk_test_51LrzyaKvbb1tU2iANKlMga7UteXAflZvCYvGMV48oyhNF43iLRn9VbMNC6o5yrYUiDDUrQKmVqx5X7w5ncU4higv00Fdl6DHv6">
         <NavigationContainer>
           <Provider store={store}>
             <TailwindProvider>

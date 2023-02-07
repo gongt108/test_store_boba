@@ -16,5 +16,10 @@ export default {
             title: 'Cafe Name',
             type: 'string',
         },
+        {
+            name: 'order',
+            title: "Order",
+            type: 'number'
+        }
     ],
 };

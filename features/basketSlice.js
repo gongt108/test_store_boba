@@ -13,7 +13,6 @@ export const basketSlice = createSlice({
         reducer: (state, action) => {
             state.items = [...state.items, action.payload]
             state.cartPrice += action.payload.totalPrice
-            console.log(state.cartPrice)
             },
         prepare: (item) => {
             const id = nanoid()
@@ -34,11 +33,15 @@ export const basketSlice = createSlice({
       state.items = newBasket;
       state.cartPrice -= action.payload.totalPrice
     },
+    clearBasket: (state, action) => {
+      state.items = []
+      state.cartPrice = 0.00
+    },
   },
 })
 
 // Action creators are generated for each case reducer function
-export const { addToBasket, removeFromBasket } = basketSlice.actions;
+export const { addToBasket, removeFromBasket, clearBasket } = basketSlice.actions;
 
 export const selectedBasketItems = state => state.basket.items;
 export const totalBasketPrice = state => state.basket.cartPrice;

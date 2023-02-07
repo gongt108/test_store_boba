@@ -3,20 +3,11 @@ import { Alert, TouchableOpacity, SafeAreaView, Text, View, ScrollView } from 'r
 import { CheckBox } from 'react-native-elements';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import {
-	useStripe,
-	Address,
-	BillingDetails,
-	usePaymentSheet
-} from '@stripe/stripe-react-native';
-import {
 	Button,
 	Card,
 	TextInput,
 } from 'react-native-paper';
 import { ArrowLeftIcon} from 'react-native-heroicons/solid';
-import PaymentScreen from './PaymentScreen';
-import { useDispatch, useSelector } from 'react-redux';
-import { selectedBasketItems, totalBasketPrice } from '../features/basketSlice';
 import CartItem from '../components/CartItem';
 
 const CheckoutScreen = () => {
@@ -28,9 +19,7 @@ const CheckoutScreen = () => {
 	const [state, setState] = React.useState('');
 	const [zipCode, setZipCode] = React.useState('');
 	const [phoneNumber, setPhoneNumber] = React.useState('');
-	const stripe = useStripe();
-	const [loading, setLoading] = useState(false);
-    
+
 
 	const {
 		params: { items, totalCartPrice },
@@ -63,6 +52,14 @@ const CheckoutScreen = () => {
     const [selectedShipping, setSelectedShipping] = React.useState(shippingOptions[0]);
     let grandTotal = (totalCartPrice * 1.1025 + selectedShipping.price).toFixed(2);
 
+	function proceedToCheckOut() {
+		if (recipientName && streetAddress1 && city && state && zipCode && phoneNumber) {
+			navigation.navigate('Payment', {grandTotal: grandTotal, name:recipientName, streetAddress1: streetAddress1, streetAddress2: streetAddress2, city: city, state: state, zipCode:zipCode})
+		} else {
+			Alert.alert("Please fill out your shipping information.")
+		}
+	}
+
 
 	return (
 		<SafeAreaView>
@@ -81,6 +78,7 @@ const CheckoutScreen = () => {
 					label="Street Address 1"
 					value={streetAddress1}
 					mode="outlined"
+					keyboardType=""
 					onChangeText={(streetAddress1) => setStreetAddress1(streetAddress1)}
 					className="mb-4"
 				/>
@@ -103,6 +101,7 @@ const CheckoutScreen = () => {
 						label="State"
 						value={state}
 						mode="outlined"
+						maxLength={2}
 						onChangeText={(state) => setState(state)}
 						className="w-16"
 					/>
@@ -110,6 +109,8 @@ const CheckoutScreen = () => {
 						label="Zip Code"
 						value={zipCode}
 						mode="outlined"
+						keyboardType="number-pad"
+						maxLength={5}
 						onChangeText={(zipCode) => setZipCode(zipCode)}
 						className="w-24"
 					/>
@@ -118,6 +119,10 @@ const CheckoutScreen = () => {
 					label="Phone Number"
 					value={phoneNumber}
 					mode="outlined"
+					keyboardType="phone-pad"
+					autoComplete='tel'
+					inpu
+					maxLength={10}
 					onChangeText={(phoneNumber) => setPhoneNumber(phoneNumber)}
 					className="mb-4"
 				/>
@@ -128,8 +133,6 @@ const CheckoutScreen = () => {
 					return (
 						<TouchableOpacity className="flex-row items-center justify-between mb-2" key={shipping.id} onPress={() => {
                             setSelectedShipping(shipping)
-                            console.log(shipping.id)
-                            console.log(selectedShipping.id)
                             }}>
 							<View className="flex-row items-center">
 								<CheckBox
@@ -194,7 +197,8 @@ const CheckoutScreen = () => {
 				color="#000000"
 				mode="contained"
                 onPress={
-					() => navigation.navigate('Payment', {grandTotal: grandTotal, name:recipientName, streetAddress1: streetAddress1, streetAddress2: streetAddress2, city: city, state: state, zipCode:zipCode})
+ 					// () => navigation.navigate('Payment', {grandTotal: grandTotal, name:recipientName, streetAddress1: streetAddress1, streetAddress2: streetAddress2, city: city, state: state, zipCode:zipCode})
+					 proceedToCheckOut
 				}
 			>
 				Pay Now

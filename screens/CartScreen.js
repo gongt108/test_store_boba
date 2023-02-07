@@ -1,10 +1,9 @@
 import { View, Text, ScrollView, Image, TouchableOpacity, SafeAreaView } from 'react-native'
 import React, { useLayoutEffect, useState } from 'react'
 import { useNavigation, useRoute } from '@react-navigation/native'
-import { urlFor } from '../sanity'
 import { ArrowLeftIcon, StarIcon, XMarkIcon } from 'react-native-heroicons/solid'
 import { ShoppingBagIcon, StarIcon as StarIconOutline, UserCircleIcon } from 'react-native-heroicons/outline'
-import { RadioButton, Checkbox, Button } from 'react-native-paper'
+import { Button } from 'react-native-paper'
 import { useDispatch, useSelector } from 'react-redux'
 import { removeFromBasket, selectedBasketItems, totalBasketPrice } from '../features/basketSlice'
 import CartItem from '../components/CartItem'
@@ -21,10 +20,6 @@ const CartScreen = () => {
             headerShown: false,
         });
     }, []);
-
-    const removeItemFromCart = () => {
-        dispatch(removeFromBasket({ id, totalPrice }))
-    }
 
   return (
     <SafeAreaView className='h-full'>
@@ -53,7 +48,7 @@ const CartScreen = () => {
                             iceLevel={item.iceLevel}
                             toppingsList={item.toppingsList}
                         />
-                        <TouchableOpacity onPress={removeItemFromCart} className='top-4 right-8'>
+                        <TouchableOpacity onPress={() => dispatch(removeFromBasket({ id: item.id, totalPrice: item.totalPrice }))} className='top-4 right-8'>
                             <XMarkIcon color={"#FF0000"} />
                         </TouchableOpacity>
                         </View>
@@ -77,9 +72,9 @@ const CartScreen = () => {
                     navigation.navigate('Checkout', {items, totalCartPrice})
                     
                 }}>
-                <Button className='mx-8 p-2' icon="cart" color="#FF0000" mode="contained" >
+                {items.length > 0 && <Button className='mx-8 p-2' icon="cart" color="#FF0000" mode="contained">
                     Proceed to Checkout
-                </Button>
+                </Button>}
             </TouchableOpacity>
         </View>
         <TouchableOpacity onPress={navigation.goBack} className='absolute top-12 left-5 p-2 bg-gray-300 rounded-full'>
